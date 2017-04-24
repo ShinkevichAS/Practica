@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include "plant.h"
 #include <windows.h>
 #include <fstream>
@@ -10,7 +11,7 @@ int main() {
 	FILE *f;
 	time_t T;
 	int k, i, j, M[15], N, l;
-	double A[15][15], Z[15], X[15], Z_Sred[15], Z_data[15][15];
+	double A[15][15], Z[15], X[15], Z_data[15][15];
 	Plant plant;
 	plant_init(plant);
 	cout << "Vvedite kolichestvo datchikov k: ";
@@ -32,6 +33,7 @@ int main() {
 	}
 	int C = 0;
 	ofstream fout("data.txt");
+	cout << "Izmerennie znacheniya:\n";
 	while (C < N) {
 		for (j = 0; j < k; j++) {
 			X[j] = plant_measure(M[j], plant);
@@ -42,7 +44,7 @@ int main() {
 				Z[i] = Z[i] + A[j][i] * X[j];
 			}
 			fout << Z[i] << ' ';
-			cout << fixed << " " << Z[i];
+			cout << fixed << ' ' << Z[i];
 		}
 		fout << '\n';
 		cout << '\n';
@@ -56,11 +58,28 @@ int main() {
 			fin >> Z_data[i][j];
 		}
 	}
-	for (j = 0; j < N; j++) {
-		for (i = 0; i < l; i++) {
-			cout << ' ' << Z_data[i][j];
+	double *Z_Sred = new double[15];
+	double *S = new double[15];
+	for (i = 0; i < l; i++) {
+		Z_Sred[i] = 0;
+		S[i] = 0;
+		for (j = 0; j < N; j++) {
+			Z_Sred[i] = Z_Sred[i] + Z_data[i][j];
+			S[i] = S[i] + pow(Z_data[i][j], 2);
 		}
-		cout << '\n';
+		Z_Sred[i] = Z_Sred[i] / N;
+		S[i] = (S[i] - N * pow(Z_Sred[i], 2)) / N;
 	}
+	cout << "\nSrednie:\n";
+	for (i = 0; i < l; i++) {
+		cout << ' ' << fixed << Z_Sred[i];
+	}
+	cout << "\nDispersia:\n";
+	for (i = 0; i < l; i++) {
+		cout << ' ' << fixed << S[i];
+	}
+	delete[] Z_Sred;
+	delete[] S;
+	cout << '\n';
 	system ("pause");
 }
