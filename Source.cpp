@@ -31,7 +31,6 @@ int main() {
 		}
 	}
 	int C = 0;
-	f = fopen("data.txt", "w");
 	ofstream fout("data.txt");
 	while (C < N) {
 		for (j = 0; j < k; j++) {
@@ -50,15 +49,13 @@ int main() {
 		Sleep(T*1000);
 		C++;
 	}
-	fclose(f);
-	f = fopen("data.txt", "r");
+	fout.close();
 	ifstream fin("data.txt");
 	for (j = 0; j < N; j++) {
 		for (i = 0; i < l; i++) {
 			fin >> Z_data[i][j];
 		}
 	}
-	fclose(f);
 	for (j = 0; j < N; j++) {
 		for (i = 0; i < l; i++) {
 			cout << ' ' << Z_data[i][j];
