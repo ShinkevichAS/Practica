@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #include "plant.h"
-
+ 
 int i,j_1,j2;
 double jtim,r,r1,r2,r3,r4,delt,tau,dx;
 long int h;
