@@ -10,8 +10,8 @@ using namespace std;
 int main() {
 	FILE *f;
 	time_t T;
-	int k, i, j, M[15], N, l;
-	double A[15][15], Z[15], X[15], Z_data[15][15];
+	int k, i, j, M[200], N, l;
+	double A[200][200], Z[200], X[200], Z_data[200][200];
 	Plant plant;
 	plant_init(plant);
 	cout << "Vvedite kolichestvo datchikov k: ";
@@ -26,14 +26,13 @@ int main() {
 	cout << "\nVvedite kolichestvo preobrazovanii l: ";
 	cin >> l;
 	cout << "\nVvedite matricu koefficientov A: \n";
-	for (j = 0; j < k; j++) {
+	for (j = 0; j <= k; j++) {
 		for (i = 0; i < l; i++) {
 			cin >> A[j][i];
 		}
 	}
 	int C = 0;
 	ofstream fout("data.txt");
-	cout << "Izmerennie znacheniya:\n";
 	while (C < N) {
 		for (j = 0; j < k; j++) {
 			X[j] = plant_measure(M[j], plant);
@@ -44,11 +43,8 @@ int main() {
 				Z[i] = Z[i] + A[j][i] * X[j];
 			}
 			fout << Z[i] << ' ';
-			cout << fixed << ' ' << Z[i];
 		}
 		fout << '\n';
-		cout << '\n';
-		Sleep(T*1000);
 		C++;
 	}
 	fout.close();
@@ -58,8 +54,8 @@ int main() {
 			fin >> Z_data[i][j];
 		}
 	}
-	double *Z_Sred = new double[15];
-	double *S = new double[15];
+	double *Z_Sred = new double[200];
+	double *S = new double[200];
 	for (i = 0; i < l; i++) {
 		Z_Sred[i] = 0;
 		S[i] = 0;
@@ -70,11 +66,42 @@ int main() {
 		Z_Sred[i] = Z_Sred[i] / N;
 		S[i] = (S[i] - N * pow(Z_Sred[i], 2)) / N;
 	}
-	cout << "\nSrednie:\n";
+	fin.close();
+	C = 0;
+	cout << 'N';
+	for (i = 0; i < k; i++) {
+		cout << fixed << "      X[" << i + 1 << "]";
+	}
+	for (j = 0; j < l; j++) {
+		cout << fixed << "         Z[" << j + 1 << "]";
+	}
+	cout << '\n';
+	while (C < N) {
+		cout << C + 1 << ' ';
+		for (j = 0; j < k; j++) {
+			cout << fixed << ' ' << X[j];
+		}
+		cout << ' ';
+		for (i = 0; i < l; i++) {
+			cout << fixed << ' ' << Z[i];
+		}
+		Sleep(T * 1000);
+		C++;
+		cout << '\n';
+		}
+	cout << '\n';
+	for (j = 0; j < k; j++) {
+		cout << ' ' << '\t';
+	}
+	cout << "Srednie:";
 	for (i = 0; i < l; i++) {
 		cout << ' ' << fixed << Z_Sred[i];
+	}	
+	cout << '\n';
+	for (j = 0; j < k; j++) {
+		cout << ' ' << '\t';
 	}
-	cout << "\nDispersia:\n";
+	cout << "Dispersia:";
 	for (i = 0; i < l; i++) {
 		cout << ' ' << fixed << S[i];
 	}
